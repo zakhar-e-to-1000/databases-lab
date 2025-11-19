@@ -1,0 +1,17 @@
+from sqlalchemy import Integer, String, Double
+from sqlalchemy.orm import relationship, mapped_column
+from extensions import db
+
+
+class River(db.Model):
+    __tablename__ = 'river'
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String(100), unique=True, nullable=False)
+    length = mapped_column(Double)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'length': self.length
+        }
