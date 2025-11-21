@@ -7,10 +7,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqldb://root:581321@localhost:3
 
 db.init_app(app)
 
-# Імпорти після ІНІЦІАЛІЗАЦІЇ db
 with app.app_context():
     from my_project.route.river_route import bp as bp_river
+    from my_project.route.region_route import bp as bp_region
     app.register_blueprint(bp_river)
+    app.register_blueprint(bp_region)
 
 
 if __name__ == "__main__":
