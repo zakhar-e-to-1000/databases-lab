@@ -3,7 +3,7 @@ from my_project.domain.measurement_point import MeasumentPoint
 from sqlalchemy import select
 
 
-class MeasumentPointDaO:
+class MeasumentPointDao:
     def create(self, river_id, location_id, description):
         r = MeasumentPoint(name=name, river_id=river_id, location_id=location_id,  # type: ignore
                            description=description)  # type: ignore
