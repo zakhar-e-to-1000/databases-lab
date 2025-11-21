@@ -3,6 +3,7 @@ from sqlalchemy import Integer, String
 from sqlalchemy.orm import relationship, mapped_column
 
 from my_project.domain.measurement_point import MeasumentPoint
+from my_project.domain.location import Location
 
 
 class Region(db.Model):

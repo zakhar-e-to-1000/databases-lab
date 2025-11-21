@@ -1,8 +1,7 @@
 from sqlalchemy import Integer, String, Double, ForeignKey
 from sqlalchemy.orm import relationship, mapped_column
 from extensions import db
-from my_project.domain.measurement_point import Measument_Point
-from my_project.domain.region import Region
+from my_project.domain.measurement_point import MeasumentPoint
 
 
 class Location(db.Model):
@@ -15,7 +14,7 @@ class Location(db.Model):
 
     region = relationship('Region', back_populates='locations')
     measurement_points = relationship(
-        'Measument_Point', back_populates='location')
+        'MeasumentPoint', back_populates='location')
 
     def to_dict(self):
         return {
