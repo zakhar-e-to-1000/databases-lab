@@ -4,14 +4,14 @@ from flask import jsonify, request
 svc = MeasumentPointService()
 
 
-def get_rivers_list():
+def get_measurement_point_list():
     result = svc.get_all()
 
     data = [dict(row)['Region'].to_dict() for row in result]
     return jsonify(data)
 
 
-def post_river():
+def post_measurement_point():
     data = request.json or {}
     river_id = data['river_id']
     location_id = data['location_id']
@@ -20,14 +20,14 @@ def post_river():
     return svc.post(river_id, location_id, description).to_dict(), 202
 
 
-def get_river(id):
+def get_measurement_point(id):
     r = svc.get(id)
     if r == None:
         return "Not found", 404
     return jsonify(r.to_dict()), 202
 
 
-def put_river(id):
+def put_measurement_point(id):
     data = request.json or {}
     river_id = data['river_id']
     location_id = data['location_id']
@@ -39,7 +39,7 @@ def put_river(id):
         return jsonify(new_r.to_dict()), 200
 
 
-def delete_river(id):
+def delete_measurement_point(id):
     if svc.delete(id):
         return "Success", 200
     else:
