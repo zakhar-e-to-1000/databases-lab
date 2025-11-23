@@ -11,3 +11,6 @@ bp.add_url_rule('/', view_func=post_river, methods=['POST'])
 
 bp.add_url_rule('/<int:id>', view_func=put_river, methods=['PUT'])
 bp.add_url_rule('/<int:id>', view_func=delete_river, methods=['DELETE'])
+
+bp.add_url_rule('/<int:id>/measurement-points',
+                view_func=get_measurement_points, methods=["GET"])

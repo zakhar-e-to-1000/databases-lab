@@ -46,3 +46,9 @@ class RegionDao:
             db.session.rollback()
             return (True, None)
         return (True, r)
+
+    def get_locations(self, id):
+        r = self.get(id)
+        if r is None:
+            return None
+        return r.locations

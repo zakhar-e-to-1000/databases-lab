@@ -62,3 +62,11 @@ def delete_river(id):
         return "Success", 200
     else:
         return "Not found", 404
+
+
+def get_measurement_points(id):
+    points = svc.get_measurement_points(id)
+    if points is None:
+        return "River not found", 404
+    res = [i.to_dict() for i in points]
+    return res, 200

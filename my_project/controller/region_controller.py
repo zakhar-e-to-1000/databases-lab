@@ -58,3 +58,11 @@ def delete_region(id):
         return "Success", 200
     else:
         return "Not found", 404
+
+
+def get_locations(id):
+    locations = svc.get_locations(id)
+    if locations is None:
+        return "Region not Found", 404
+    res = [i.to_dict() for i in locations]
+    return res, 200

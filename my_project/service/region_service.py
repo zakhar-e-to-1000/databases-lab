@@ -19,3 +19,6 @@ class RegionService:
 
     def update(self, id, new_name):
         return self.dao.update(id, new_name)
+
+    def get_locations(self, id):
+        return self.dao.get_locations(id)

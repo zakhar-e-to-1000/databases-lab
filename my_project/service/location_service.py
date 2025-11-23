@@ -19,3 +19,6 @@ class LocationService:
 
     def update(self, id, new_name, new_region_id, new_latitude, new_longitude):
         return self.dao.update(id, new_name, new_region_id, new_latitude, new_longitude)
+
+    def get_measurement_points(self, id):
+        return self.dao.get_measurement_points(id)

@@ -19,3 +19,6 @@ class RiverService:
 
     def update(self, id, new_name, new_length):
         return self.dao.update(id, new_name, new_length)
+
+    def get_measurement_points(self, id):
+        return self.dao.get_measurement_points(id)

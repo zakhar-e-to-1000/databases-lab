@@ -11,3 +11,4 @@ bp.add_url_rule('/', view_func=post_region, methods=['POST'])
 
 bp.add_url_rule('/<int:id>', view_func=put_region, methods=['PUT'])
 bp.add_url_rule('/<int:id>', view_func=delete_region, methods=['DELETE'])
+bp.add_url_rule('/<int:id>/locations', view_func=get_locations)
