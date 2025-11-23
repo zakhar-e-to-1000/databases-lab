@@ -1,13 +1,18 @@
 from extensions import db
 from my_project.domain.region import Region
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 
 class RegionDao:
     def create(self, name):
         r = Region(name=name)  # type: ignore
         db.session.add(r)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return None
         return r
 
     def get(self, id):
@@ -20,11 +25,24 @@ class RegionDao:
         ).mappings().all()
         return list
 
-    def delete(self, r: Region):
+    def delete(self, id):
+        r = self.get(id)
+        if r is None:
+            return False
         db.session.delete(r)
         db.session.commit()
+        return True
 
-    def update(self, r, new_name):
+    def update(self, id, new_name):
+        r = self.get(id)
+        if r is None:
+            return (False, None)
+
         r.name = new_name
-        db.session.commit()
-        return r
+
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return (True, None)
+        return (True, r)

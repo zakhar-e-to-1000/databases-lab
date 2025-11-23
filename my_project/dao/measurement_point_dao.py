@@ -1,14 +1,19 @@
 from extensions import db
 from my_project.domain.measurement_point import MeasumentPoint
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 
 class MeasumentPointDao:
     def create(self, river_id, location_id, description):
-        r = MeasumentPoint(name=name, river_id=river_id, location_id=location_id,  # type: ignore
+        r = MeasumentPoint(river_id=river_id, location_id=location_id,  # type: ignore
                            description=description)  # type: ignore
         db.session.add(r)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return None
         return r
 
     def get(self, id):
@@ -21,13 +26,24 @@ class MeasumentPointDao:
         ).mappings().all()
         return list
 
-    def delete(self, r: MeasumentPoint):
+    def delete(self, id):
+        r = self.get(id)
+        if r is None:
+            return False
         db.session.delete(r)
         db.session.commit()
+        return True
 
-    def update(self, r: MeasumentPoint, river_id, location_id, description):
+    def update(self, id: MeasumentPoint, river_id, location_id, description):
+        r = self.get(id)
+        if r is None:
+            return (False, None)
         r.river_id = river_id,
         r.location_id = location_id,
         r.description = description
-        db.session.commit()
-        return r
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return (True, None)
+        return (True, r)

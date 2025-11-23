@@ -1,6 +1,7 @@
 from extensions import db
 from my_project.domain.location import Location
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 
 
 class LocationDao:
@@ -8,7 +9,11 @@ class LocationDao:
         r = Location(name=name, region_id=region_id,  # type: ignore
                      latitude=latitude, longitude=longitude)  # type: ignore
         db.session.add(r)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return None
         return r
 
     def get(self, id):
@@ -21,11 +26,25 @@ class LocationDao:
         ).mappings().all()
         return list
 
-    def delete(self, r: Location):
+    def delete(self, id):
+        r = self.get(id)
+        if r is None:
+            return False
         db.session.delete(r)
         db.session.commit()
+        return True
 
-    def update(self, r, new_name, new_region_id, new_latitude, new_longitude):
+    def update(self, id, new_name, new_region_id, new_latitude, new_longitude):
+        r = self.get(id)
+        if r is None:
+            return (False, None)
         r.name = new_name
-        db.session.commit()
-        return r
+        r.region_id = new_region_id
+        r.latitude = new_latitude
+        r.longitude = new_longitude
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return (True, None)
+        return (True, r)
