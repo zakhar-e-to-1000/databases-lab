@@ -1,6 +1,7 @@
 from my_project.service.measurement_point_service import MeasumentPointService
 from flask import jsonify, request
 from pydantic import BaseModel, ConfigDict, ValidationError
+from typing import Optional
 
 
 class MeasurementPoint(BaseModel):
@@ -8,7 +9,7 @@ class MeasurementPoint(BaseModel):
 
     river_id: int
     location_id: int
-    description: str
+    description: Optional[str]
 
 
 svc = MeasumentPointService()
@@ -17,7 +18,7 @@ svc = MeasumentPointService()
 def get_measurement_point_list():
     result = svc.get_all()
 
-    data = [dict(row)['Region'].to_dict() for row in result]
+    data = [dict(row)['MeasumentPoint'].to_dict() for row in result]
     return jsonify(data)
 
 
