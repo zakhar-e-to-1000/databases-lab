@@ -15,14 +15,7 @@ class RiverService:
         return self.dao.get_all()
 
     def delete(self, id):
-        r = self.dao.get(id)
-        if r is None:
-            return False
-        self.dao.delete(r)
-        return True
+        return self.dao.delete(id)
 
     def update(self, id, new_name, new_length):
-        r = self.dao.get(id)
-        if r is None:
-            return None
-        return self.dao.update(r, new_name, new_length)
+        return self.dao.update(id, new_name, new_length)

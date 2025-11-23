@@ -15,14 +15,7 @@ class MeasumentPointService:
         return self.dao.get_all()
 
     def delete(self, id):
-        r = self.dao.get(id)
-        if r is None:
-            return False
-        self.dao.delete(r)
-        return True
+        return self.dao.delete(id)
 
     def update(self, id, river_id, location_id, description):
-        r = self.dao.get(id)
-        if r is None:
-            return None
-        return self.dao.update(r, river_id, location_id, description)
+        return self.dao.update(id, river_id, location_id, description)
