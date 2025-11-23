@@ -15,25 +15,30 @@ def post_river():
     data = request.json or {}
     name = data['name']
     length = data['length']
-    return svc.post(name, length).to_dict(), 202
+    res = svc.post(name, length)
+    if res is None:
+        return "Unique keys (or other database integrity) error", 400
+    else:
+        return res.to_dict(), 201
 
 
 def get_river(id):
     r = svc.get(id)
     if r == None:
         return "Not found", 404
-    return jsonify(r.to_dict()), 202
+    return jsonify(r.to_dict()), 200
 
 
 def put_river(id):
     data = request.json or {}
     new_name = data['name']
     new_length = data['length']
-    new_r = svc.update(id, new_name, new_length)
-    if new_r is None:
+    does_exists, new_r = svc.update(id, new_name, new_length)
+    if not does_exists:
         return "Not Found", 404
-    else:
-        return jsonify(new_r.to_dict()), 200
+    if new_r is None:
+        return "Unique columns (or other database integriry) error", 400
+    return jsonify(new_r.to_dict()), 200
 
 
 def delete_river(id):

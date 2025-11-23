@@ -17,14 +17,18 @@ def post_measurement_point():
     location_id = data['location_id']
     description = data['description']
 
-    return svc.post(river_id, location_id, description).to_dict(), 202
+    res = svc.post(river_id, location_id, description)
+    if res is None:
+        return "Unique keys (or other database integrity) error", 400
+    else:
+        return res.to_dict(), 201
 
 
 def get_measurement_point(id):
     r = svc.get(id)
     if r == None:
         return "Not found", 404
-    return jsonify(r.to_dict()), 202
+    return jsonify(r.to_dict()), 200
 
 
 def put_measurement_point(id):
@@ -32,11 +36,12 @@ def put_measurement_point(id):
     river_id = data['river_id']
     location_id = data['location_id']
     description = data['description']
-    new_r = svc.update(id, river_id, location_id, description)
-    if new_r is None:
+    does_exists, new_r = svc.update(id, river_id, location_id, description)
+    if not does_exists:
         return "Not Found", 404
-    else:
-        return jsonify(new_r.to_dict()), 200
+    if new_r is None:
+        return "Unique columns (or other database integriry) error", 400
+    return jsonify(new_r.to_dict()), 200
 
 
 def delete_measurement_point(id):
