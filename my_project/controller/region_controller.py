@@ -1,6 +1,14 @@
 from my_project.service.region_service import RegionService
 from flask import jsonify, request
 
+from pydantic import BaseModel, ConfigDict, ValidationError
+
+
+class Region(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    name: str
+
+
 svc = RegionService()
 
 
@@ -12,8 +20,11 @@ def get_regions_list():
 
 
 def post_region():
-    data = request.json or {}
-    name = data['name']
+    try:
+        data = Region.model_validate(request.json)
+    except ValidationError:
+        return "Invalid JSON", 400
+    name = data.name
     res = svc.post(name)
     if res is None:
         return "Unique keys (or other database integrity) error", 400
@@ -29,9 +40,12 @@ def get_region(id):
 
 
 def put_region(id):
-    data = request.json or {}
-    new_name = data['name']
-    does_exists, new_r = svc.update(id, new_name)
+    try:
+        data = Region.model_validate(request.json)
+    except ValidationError:
+        return "Invalid JSON", 400
+    name = data.name
+    does_exists, new_r = svc.update(id, name)
     if not does_exists:
         return "Not Found", 404
     if new_r is None:

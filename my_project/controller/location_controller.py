@@ -1,5 +1,15 @@
 from my_project.service.location_service import LocationService
 from flask import jsonify, request
+from pydantic import BaseModel, ConfigDict, ValidationError
+
+
+class Location(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    name: str
+    region_id: int
+    latitude: float
+    longitude: float
+
 
 svc = LocationService()
 
@@ -12,11 +22,14 @@ def get_locations_list():
 
 
 def post_location():
-    data = request.json or {}
-    name = data['name']
-    region_id = data['region_id']
-    latitude = data['latitude']
-    longitude = data['longitude']
+    try:
+        data = Location.model_validate(request.json)
+    except ValidationError:
+        return "Invalid JSON", 400
+    name = data.name
+    region_id = data.region_id
+    latitude = data.latitude
+    longitude = data.longitude
     res = svc.post(name, region_id, latitude, longitude)
     if res is None:
         return "Unique keys (or other database integrity) error"
@@ -32,11 +45,14 @@ def get_location(id):
 
 
 def put_location(id):
-    data = request.json or {}
-    name = data['name']
-    region_id = data['region_id']
-    latitude = data['latitude']
-    longitude = data['longitude']
+    try:
+        data = Location.model_validate(request.json)
+    except ValidationError:
+        return "Invalid JSON", 400
+    name = data.name
+    region_id = data.region_id
+    latitude = data.latitude
+    longitude = data.longitude
 
     does_exists, new_r = svc.update(id, name, region_id, latitude, longitude)
     if not does_exists:
