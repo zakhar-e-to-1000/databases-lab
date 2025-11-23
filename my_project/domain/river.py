@@ -11,6 +11,8 @@ class River(db.Model):
     length = mapped_column(Double)
     measurement_points = relationship(
         'MeasumentPoint', back_populates='river')
+    locations = relationship(
+        'Location', back_populates='rivers', secondary='measurement_point')
 
     def to_dict(self):
         return {

@@ -16,6 +16,9 @@ class Location(db.Model):
     measurement_points = relationship(
         'MeasumentPoint', back_populates='location')
 
+    rivers = relationship(
+        "River", back_populates='locations', secondary="measurement_point")
+
     def to_dict(self):
         return {
             'id': self.id,

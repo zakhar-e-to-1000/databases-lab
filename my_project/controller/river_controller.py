@@ -70,3 +70,11 @@ def get_measurement_points(id):
         return "River not found", 404
     res = [i.to_dict() for i in points]
     return res, 200
+
+
+def get_locations(id):
+    locations = svc.get_locations(id)
+    if locations is None:
+        return "River not found", 404
+    res = [i.to_dict() for i in locations]
+    return res, 200

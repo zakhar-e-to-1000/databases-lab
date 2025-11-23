@@ -54,3 +54,9 @@ class LocationDao:
         if r is None:
             return None
         return r.measurement_points
+
+    def get_rivers(self, id):
+        r = self.get(id)
+        if r is None:
+            return None
+        return r.rivers

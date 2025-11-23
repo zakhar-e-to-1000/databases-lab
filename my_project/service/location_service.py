@@ -22,3 +22,6 @@ class LocationService:
 
     def get_measurement_points(self, id):
         return self.dao.get_measurement_points(id)
+
+    def get_rivers(self, id):
+        return self.dao.get_rivers(id)
