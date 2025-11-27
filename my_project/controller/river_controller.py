@@ -78,3 +78,27 @@ def get_locations(id):
         return "River not found", 404
     res = [i.to_dict() for i in locations]
     return res, 200
+
+
+def get_points():
+    result = svc.get_all()
+    rivers = [dict(row)['River'].to_dict() for row in result]
+    ans = []
+    for river in rivers:
+        points = svc.get_measurement_points(river['id'])
+        points_dict = [i.to_dict() for i in points]
+        river["points"] = points_dict
+        ans.append(river)
+    return ans
+
+
+def get_l():
+    result = svc.get_all()
+    rivers = [dict(row)['River'].to_dict() for row in result]
+    ans = []
+    for river in rivers:
+        locations = svc.get_locations(river['id'])
+        loc_dict = [i.to_dict() for i in locations]
+        river["locations"] = loc_dict
+        ans.append(river)
+    return ans
