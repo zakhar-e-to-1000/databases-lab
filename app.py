@@ -12,10 +12,12 @@ with app.app_context():
     from my_project.route.region_route import bp as bp_region
     from my_project.route.location_route import bp as bp_location
     from my_project.route.measurement_point_route import bp as bp_mesure
+    from my_project.route.procedures_route import bp as bp_proc
     app.register_blueprint(bp_river)
     app.register_blueprint(bp_region)
     app.register_blueprint(bp_location)
     app.register_blueprint(bp_mesure)
+    app.register_blueprint(bp_proc)
 
 
 if __name__ == "__main__":
